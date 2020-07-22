@@ -32,6 +32,8 @@
 
 #include <modules/opengl/openglmoduledefine.h>
 
+#include <inviwo/core/util/sourcecontext.h>
+
 #ifdef __APPLE__
 #define GLEW_NO_GLU
 #endif
@@ -50,13 +52,19 @@ namespace inviwo {
 IVW_MODULE_OPENGL_API std::string getGLErrorString(GLenum err);
 
 /**
- * Log the last OpenGL error if there has been an error, i.e. glGetError() != GL_NO_ERROR.
+ * Log the last OpenGL errors if there has been an error, i.e. glGetError() != GL_NO_ERROR.
  */
 IVW_MODULE_OPENGL_API void LogGLError(const char* fileName, const char* functionName,
                                       int lineNumber);
 
+/**
+ * Log the last OpenGL errors if there has been an error, i.e. glGetError() != GL_NO_ERROR.
+ */
+IVW_MODULE_OPENGL_API void LogGLError(SourceContext context);
+
 #if defined(IVW_DEBUG) || defined(IVW_FORCE_ASSERTIONS)
-#define LGL_ERROR inviwo::LogGLError(__FILE__, __FUNCTION__, __LINE__)
+#define LGL_ERROR inviwo::LogGLError(IVW_CONTEXT)
+#define LGL_ERROR_CUSTOM(source) inviwo::LogGLError(IVW_CONTEXT_CUSTOM(source))
 #define LGL_ERROR_SUPPRESS glGetError()
 #else
 #define LGL_ERROR

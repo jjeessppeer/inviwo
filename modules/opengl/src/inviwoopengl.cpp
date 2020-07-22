@@ -92,16 +92,27 @@ std::string getGLErrorString(GLenum err) {
     return errorMessage.str();
 }
 
-void LogGLError(const char* fileName, const char* functionName, int lineNumber) {
+namespace detail {
+void logGLError(const char* caller, const char* fileName, const char* functionName,
+                int lineNumber) {
     GLuint maxErrors = 255;
     GLenum err;
     // There might be several errors, call glGetError in a loop:
     // https://www.opengl.org/sdk/docs/man2/xhtml/glGetError.xml
     while ((err = glGetError()) != GL_NO_ERROR && maxErrors--) {
-        inviwo::LogCentral::getPtr()->log("OpenGL", LogLevel::Error, LogAudience::Developer,
-                                          fileName, functionName, lineNumber,
-                                          getGLErrorString(err));
+        inviwo::LogCentral::getPtr()->log(caller, LogLevel::Error, LogAudience::Developer, fileName,
+                                          functionName, lineNumber, getGLErrorString(err));
     }
+}
+}  // namespace detail
+
+void LogGLError(const char* fileName, const char* functionName, int lineNumber) {
+    detail::logGLError("OpenGL", fileName, functionName, lineNumber);
+}
+
+void LogGLError(SourceContext context) {
+    detail::logGLError(context.getCaller().c_str(), context.getFile().c_str(),
+                       context.getFunction().c_str(), context.getLine());
 }
 
 }  // namespace inviwo
