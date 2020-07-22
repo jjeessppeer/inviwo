@@ -576,7 +576,7 @@ int getLogLineNumber(const std::string& compileLogLine) {
 std::string getShaderInfoLog(GLuint id) {
     GLint maxLogLength;
     glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLogLength);
-    LGL_ERROR;
+    LGL_ERROR_CUSTOM("utilgl::getShaderInfoLog");
 
     if (maxLogLength > 1) {
         auto shaderInfoLog = std::make_unique<GLchar[]>(maxLogLength);
@@ -591,7 +591,7 @@ std::string getShaderInfoLog(GLuint id) {
 std::string getProgramInfoLog(GLuint id) {
     GLint maxLogLength;
     glGetProgramiv(id, GL_INFO_LOG_LENGTH, &maxLogLength);
-    LGL_ERROR;
+    LGL_ERROR_CUSTOM("utilgl::getProgramInfoLog");
 
     if (maxLogLength > 1) {
         auto shaderInfoLog = std::make_unique<GLchar[]>(maxLogLength);
