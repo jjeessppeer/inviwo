@@ -540,7 +540,9 @@ std::string ShaderObject::resolveLog(const std::string& compileLog) const {
 void ShaderObject::upload() {
     const char* source = sourceProcessed_.c_str();
     glShaderSource(id_, 1, &source, nullptr);
-    LGL_ERROR;
+    if (LGL_ERROR != 0) {
+        throw Exception("Failed to set shader source", IVW_CONTEXT);
+    };
 }
 
 bool ShaderObject::isReady() const {
