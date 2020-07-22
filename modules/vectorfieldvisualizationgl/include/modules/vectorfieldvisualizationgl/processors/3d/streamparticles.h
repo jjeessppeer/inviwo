@@ -147,7 +147,7 @@ private:
     double reseedtime_;
     double prevT_;
     Clock clock_;
-    bool ready_;
+    bool ready_ = false;
     bool buffersDirty_ = true;
 
     std::shared_ptr<Mesh> mesh_{nullptr};
